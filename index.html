@@ -3,124 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Simple Budget Tracker</title>
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#4CAF50"/>
+  <meta name="theme-color" content="#4caf50"/>
+  <link rel="manifest" href="manifest.json">
+  <title>Budget Tracker</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-      background: #f4f4f4;
-    }
-    h1, h2 {
-      text-align: center;
-    }
-    input, button {
-      padding: 10px;
-      margin: 5px 0;
-      width: 100%;
-    }
-    .bill-list {
-      margin-top: 20px;
-    }
-    .bill {
-      background: white;
-      padding: 10px;
-      margin: 5px 0;
-      border-left: 5px solid teal;
-    }
-    .summary {
-      background: #fff3cd;
-      padding: 10px;
-      margin-top: 20px;
-      border: 1px solid #ffeeba;
-    }
+    body { font-family: sans-serif; max-width: 600px; margin: auto; padding: 1rem; }
+    input, button { margin: 0.25rem 0.5rem 0.25rem 0; }
+    ul { list-style: none; padding: 0; }
+    li { margin: 0.25rem 0; }
   </style>
 </head>
 <body>
-  <h1>💰 Budget & Bill Tracker</h1>
+  <h1>Budget Tracker</h1>
 
-  <div>
-    <h2>Set Monthly Income</h2>
-    <input type="number" id="incomeInput" placeholder="Enter your monthly income" />
-    <button onclick="setIncome()">Set Income</button>
-  </div>
+  <h3>Income Sources</h3>
+  <form id="income-form">
+    <input type="text" id="income-name" placeholder="Source (e.g. Salary)" required>
+    <input type="number" id="income-amount" placeholder="Amount" required>
+    <button type="submit">Add Income</button>
+  </form>
+  <ul id="income-list"></ul>
+  <p><strong>Total Income:</strong> $<span id="total-income">0</span></p>
 
-  <div>
-    <h2>Add Bill</h2>
-    <input type="text" id="billName" placeholder="Bill name (e.g., Rent, Phone)" />
-    <input type="number" id="billAmount" placeholder="Amount (e.g., 200)" />
-    <button onclick="addBill()">Add Bill</button>
-  </div>
-
-  <div class="summary" id="summaryBox" style="display:none;">
-    <h3>Summary</h3>
-    <p><strong>Income:</strong> $<span id="incomeDisplay">0</span></p>
-    <p><strong>Total Bills:</strong> $<span id="totalBills">0</span></p>
-    <p><strong>Remaining:</strong> $<span id="remaining">0</span></p>
-  </div>
-
-  <div class="bill-list" id="billList"></div>
-
-  <script>
-    let income = 0;
-    let bills = [];
-
-    function setIncome() {
-      const incomeInput = document.getElementById('incomeInput').value;
-      income = parseFloat(incomeInput) || 0;
-      updateSummary();
-    }
-
-    function addBill() {
-      const name = document.getElementById('billName').value;
-      const amount = parseFloat(document.getElementById('billAmount').value);
-
-      if (!name || isNaN(amount)) {
-        alert('Please enter both a bill name and amount.');
-        return;
-      }
-
-      bills.push({ name, amount });
-      document.getElementById('billName').value = '';
-      document.getElementById('billAmount').value = '';
-      renderBills();
-      updateSummary();
-    }
-
-    function renderBills() {
-      const billList = document.getElementById('billList');
-      billList.innerHTML = '';
-      bills.forEach((bill, index) => {
-        const billDiv = document.createElement('div');
-        billDiv.className = 'bill';
-        billDiv.innerHTML = \`
-          <strong>\${bill.name}</strong>: $\${bill.amount.toFixed(2)}
-          <button style="float:right;" onclick="removeBill(\${index})">❌</button>
-        \`;
-        billList.appendChild(billDiv);
-      });
-    }
-
-    function removeBill(index) {
-      bills.splice(index, 1);
-      renderBills();
-      updateSummary();
-    }
-
-    function updateSummary() {
-      const total = bills.reduce((sum, bill) => sum + bill.amount, 0);
-      document.getElementById('incomeDisplay').innerText = income.toFixed(2);
-      document.getElementById('totalBills').innerText = total.toFixed(2);
-      document.getElementById('remaining').innerText = (income - total).toFixed(2);
-      document.getElementById('summaryBox').style.display = 'block';
-    }
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
