@@ -11,3 +11,16 @@ self.addEventListener("fetch", event => {
     caches.match(event.request).then(response => response || fetch(event.request))
   );
 });
+function updateTTable() {
+  const tBody = document.getElementById('t-table-body');
+  tBody.innerHTML = "";
+
+  incomeSources.forEach(source => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td></td>
+      <td>${source.name}: $${source.amount.toFixed(2)}</td>
+    `;
+    tBody.appendChild(row);
+  });
+}
